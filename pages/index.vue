@@ -31,8 +31,10 @@
               link
             </v-btn>
           </template>
-          <template v-slot:[`item.delete`]>
-            <v-btn rounded color="error" dark> Delete </v-btn>
+          <template v-slot:[`item.delete`]="{ item }">
+            <v-btn rounded color="error" dark @click="openDialogDelete(item)">
+              Delete
+            </v-btn>
           </template>
         </v-data-table>
       </v-card>
@@ -92,11 +94,48 @@
             <v-btn color="blue darken-1" text @click="closeDialog">
               Close
             </v-btn>
-            <v-btn color="blue darken-1" text @click="handleSaveData">
+            <v-btn
+              color="blue darken-1"
+              text
+              :loading="loading"
+              :disabled="loading"
+              @click="handleSaveData"
+            >
               Save
             </v-btn>
           </v-card-actions>
         </v-form>
+      </v-card>
+    </v-dialog>
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+      absolute
+      top
+      color="success"
+      outlined
+      right
+    >
+      {{ text }}
+      <template v-slot:action="{ attrs }">
+        <v-btn color="blue" text v-bind="attrs" @click="snackbar = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
+    <v-dialog v-model="dialog2" persistent max-width="290">
+      <v-card>
+        <v-card-title class="text-h5">
+          Do you want to delete this information?
+        </v-card-title>
+        <v-card-text>{{ prepareDeleteData.title }}</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click="dialog2 = false">
+            Close
+          </v-btn>
+          <v-btn color="error" text @click="deleteItem"> Delete </v-btn>
+        </v-card-actions>
       </v-card>
     </v-dialog>
   </v-row>
@@ -107,7 +146,11 @@ export default {
   middleware: 'authenticated',
   data() {
     return {
+      loading: false,
       valid: true,
+      snackbar: false,
+      text: 'ADDED a content success',
+      timeout: 2000,
       title: '',
       link: '',
       subtitle: '',
@@ -124,6 +167,7 @@ export default {
           'Avatar size should be less than 2 MB!',
       ],
       dialog: false,
+      dialog2: false,
       search: '',
       headers: [
         {
@@ -154,6 +198,7 @@ export default {
         },
       ],
       contents: [],
+      prepareDeleteData: {},
     }
   },
   mounted() {
@@ -165,15 +210,13 @@ export default {
       this.dialog = false
     },
     openLink(item) {
-      console.warn('item', item)
       window.open(item.link_post, '_blank')
     },
     handleSaveData() {
-      console.warn('files', this.files)
       if (this.$refs.form.validate()) {
         if (this.files.name) {
+          this.loading = true
           this.uploadImageFile(this.files)
-          this.dialog = false
         }
       }
     },
@@ -196,11 +239,10 @@ export default {
         .then((snapshot) => {
           // Once the image is uploaded, obtain the download URL, which
           // is the publicly accessible URL of the image.
-          console.warn('snapshot', snapshot)
+
           snapshot.ref.getDownloadURL().then((url) => {
             this.imageUrl = url
-            console.warn('url', url)
-            console.warn('this.imageUrl', this.imageUrl)
+
             this.saveDataFirebase()
           })
         })
@@ -219,7 +261,18 @@ export default {
         })
         .catch((error) => console.log(error.code, error.message))
 
-      console.warn('submit', submit)
+      const updateSubmit = await this.$fire.database
+        .ref('content/' + submit.key)
+        .update({
+          path: 'content/' + submit.key,
+        })
+        .catch((error) => console.log(error.code, error.message))
+      console.log('updateSubmit', updateSubmit)
+      this.getData()
+      this.dialog = false
+      this.loading = false
+      this.snackbar = true
+      this.$refs.form.reset()
     },
     async getData() {
       const self = this
@@ -230,11 +283,21 @@ export default {
           const data = snapshot.val()
           const itemData = Object.values(data)
           self.contents = itemData
-          console.warn('itemData', itemData)
         })
         .catch((error) => console.log(error.message))
-      console.warn('getcontents', getcontents)
-      //
+      console.log('getcontents', getcontents)
+    },
+    openDialogDelete(item) {
+      this.dialog2 = true
+      this.prepareDeleteData = item
+    },
+    async deleteItem() {
+      const deleteData = await this.$fire.database
+        .ref(this.prepareDeleteData.path)
+        .remove()
+        .catch((error) => console.log(error.message))
+      console.log('deleteData', deleteData)
+      this.getData()
     },
   },
 }
