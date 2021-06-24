@@ -87,9 +87,11 @@ export default {
           included_segments: ['Active Users', 'Inactive Users'],
           headings: {
             en: this.title,
+            th: this.title,
           },
           contents: {
             en: this.text,
+            th: this.text,
           },
         }
 
