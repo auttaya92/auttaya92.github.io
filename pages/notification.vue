@@ -1,6 +1,6 @@
 <template>
   <div>
-    <H1>Push Notification</H1>
+    <H1>PUSH NOTIFICATION</H1>
     <v-row>
       <v-col class="text-center">
         <v-form ref="form" v-model="valid" lazy-validation>
