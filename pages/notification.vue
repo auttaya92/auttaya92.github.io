@@ -83,7 +83,7 @@ export default {
     async sendingNotification() {
       try {
         const data = {
-          app_id: '618fe922-7c23-4ad6-a7c1-1bf1131f1cb2',
+          app_id: '8500cb98-bece-4d32-9e2a-bf595625330a',
           included_segments: ['Active Users', 'Inactive Users'],
           headings: {
             en: this.title,
@@ -101,7 +101,7 @@ export default {
           {
             headers: {
               Authorization:
-                'Basic Y2JlODI0MDItNWZmZS00ODA1LWE5MmMtMjQyZGRiMjMwNzQ3',
+                'Basic MDViNzJjYTItNTE3NS00YzNlLTg0NjAtYmMxMzRlOGQ1M2Qx',
             },
           }
         )
