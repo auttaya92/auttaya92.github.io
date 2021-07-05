@@ -61,6 +61,11 @@ export default {
           title: 'Notification',
           to: '/notification',
         },
+        {
+          icon: 'mdi-file-document-edit-outline',
+          title: 'Contract',
+          to: '/contract',
+        },
       ],
       miniVariant: true,
       title: 'CMS มังกรฟ้า มหานคร',
