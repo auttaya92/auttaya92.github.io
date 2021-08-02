@@ -23,8 +23,8 @@
             :disabled="!valid"
             color="success"
             class="mr-4"
-            @click="validate"
             block
+            @click="validate"
           >
             send notification
           </v-btn>
@@ -41,7 +41,7 @@
       right
     >
       {{ messages }}
-      <template v-slot:action="{ attrs }">
+      <template #action="{ attrs }">
         <v-btn color="blue" text v-bind="attrs" @click="snackbar = false">
           Close
         </v-btn>
@@ -56,6 +56,7 @@ export default {
     return {
       valid: true,
       title: '',
+      fcmtoken: [],
       titleRules: [
         (v) => !!v || 'title is required',
         (v) => (v && v.length <= 50) || 'Title must be less than 50 characters',
@@ -65,55 +66,70 @@ export default {
       snackbar: false,
       messages: 'push notification success',
       timeout: 2000,
-    }
+    };
   },
-  mounted() {},
+  mounted() {
+    this.getData();
+  },
   methods: {
     validate() {
       if (this.$refs.form.validate()) {
-        this.sendingNotification()
+        this.sendingNotification();
       }
     },
     reset() {
-      this.$refs.form.reset()
+      this.$refs.form.reset();
     },
     resetValidation() {
-      this.$refs.form.resetValidation()
+      this.$refs.form.resetValidation();
     },
     async sendingNotification() {
       try {
         const data = {
-          app_id: '8500cb98-bece-4d32-9e2a-bf595625330a',
-          included_segments: ['Active Users', 'Inactive Users'],
-          headings: {
-            en: this.title,
-            th: this.title,
+          registration_ids: this.fcmtoken,
+          notification: {
+            title: this.title,
+            body: this.text,
+            sound: 'default',
+            click_action: 'FCM_PLUGIN_ACTIVITY',
+            icon: 'fcm_push_icon',
           },
-          contents: {
-            en: this.text,
-            th: this.text,
-          },
-        }
+        };
 
         const response = await this.$axios.post(
-          'https://onesignal.com/api/v1/notifications',
+          'https://fcm.googleapis.com/fcm/send',
           data,
           {
             headers: {
               Authorization:
-                'Basic MDViNzJjYTItNTE3NS00YzNlLTg0NjAtYmMxMzRlOGQ1M2Qx',
+                'key=AAAApnkduNc:APA91bGNtQAb0myOlnOmSZ3RiFoQutOXuosspsS_KWPMjljaSjUUgMJZ48imiw_pfsMpyR6rR9J27jVS02O7rnWs7Bc1juHIEU95p9xogaFRAzwBG09W6b_WnIryMm2KjvPSnxo2Juz2',
             },
           }
-        )
-        console.warn('response', response)
+        );
+        console.warn('response', response);
         if (response.status === 200) {
-          this.snackbar = true
-          this.$refs.form.reset()
+          this.snackbar = true;
+          this.$refs.form.reset();
         }
       } catch (e) {
-        console.log('error', e)
+        console.log('error', e);
       }
     },
+    async getData() {
+      const self = this;
+      const getcontents = await this.$fire.database
+        .ref('notification/')
+        .once('value', function (snapshot) {
+          console.log(snapshot.val());
+          const data = snapshot.val();
+          const itemData = Object.values(data);
+          const fcmtoken = [];
+          itemData.map((data) => fcmtoken.push(data.fcm));
+          self.fcmtoken = fcmtoken;
+        })
+        .catch((error) => console.log(error.message));
+      console.log('getcontents', getcontents);
+    },
   },
-}
+};
 </script>

@@ -11,9 +11,9 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' },
+      { hid: 'description', name: 'description', content: '' }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -30,7 +30,7 @@ export default {
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/vuetify
-    '@nuxtjs/vuetify',
+    '@nuxtjs/vuetify'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -40,7 +40,7 @@ export default {
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
     '@nuxtjs/firebase',
-    'cookie-universal-nuxt',
+    'cookie-universal-nuxt'
   ],
   firebase: {
     config: {
@@ -54,7 +54,7 @@ export default {
       storageBucket: 'blue-dragon-d0289.appspot.com',
       messagingSenderId: '714996562135',
       appId: '1:714996562135:web:6406fa74517804ff9e1892',
-      measurementId: 'G-2H8N7N7DRN',
+      measurementId: 'G-2H8N7N7DRN'
     },
     services: {
       auth: true,
@@ -65,8 +65,8 @@ export default {
       messaging: true,
       performance: true,
       analytics: true,
-      remoteConfig: true,
-    },
+      remoteConfig: true
+    }
   },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},
@@ -74,8 +74,8 @@ export default {
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
     manifest: {
-      lang: 'en',
-    },
+      lang: 'en'
+    }
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
@@ -91,10 +91,10 @@ export default {
           info: colors.teal.lighten1,
           warning: colors.amber.base,
           error: colors.deepOrange.accent4,
-          success: colors.green.accent3,
-        },
-      },
-    },
+          success: colors.green.accent3
+        }
+      }
+    }
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
@@ -103,8 +103,8 @@ export default {
       config.module.rules.push({
         enforce: 'pre',
         test: /\.(js|vue)$/,
-        exclude: /(node_modules)/,
+        exclude: /(node_modules)/
       })
-    },
-  },
+    }
+  }
 }
