@@ -1,53 +1,28 @@
 <template>
-  <div>
-    <H1>PUSH NOTIFICATION</H1>
-    <v-row>
-      <v-col class="text-center">
-        <v-form ref="form" v-model="valid" lazy-validation>
-          <v-text-field
-            v-model="title"
-            :counter="50"
-            :rules="titleRules"
-            label="Notification title"
-            required
-          ></v-text-field>
+<div>
+  <H1>PUSH NOTIFICATION</H1>
+  <v-row>
+    <v-col class="text-center">
+      <v-form ref="form" v-model="valid" lazy-validation>
+        <v-text-field v-model="title" :counter="50" :rules="titleRules" label="Notification title" required></v-text-field>
 
-          <v-text-field
-            v-model="text"
-            :rules="textRules"
-            label="Notification text"
-            required
-          ></v-text-field>
+        <v-text-field v-model="text" :rules="textRules" label="Notification text" required></v-text-field>
 
-          <v-btn
-            :disabled="!valid"
-            color="success"
-            class="mr-4"
-            block
-            @click="validate"
-          >
-            send notification
-          </v-btn>
-        </v-form>
-      </v-col>
-    </v-row>
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="timeout"
-      absolute
-      top
-      color="success"
-      outlined
-      right
-    >
-      {{ messages }}
-      <template #action="{ attrs }">
-        <v-btn color="blue" text v-bind="attrs" @click="snackbar = false">
-          Close
+        <v-btn :disabled="!valid" color="success" class="mr-4" block @click="validate">
+          send notification
         </v-btn>
-      </template>
-    </v-snackbar>
-  </div>
+      </v-form>
+    </v-col>
+  </v-row>
+  <v-snackbar v-model="snackbar" :timeout="timeout" absolute top color="success" outlined right>
+    {{ messages }}
+    <template #action="{ attrs }">
+      <v-btn color="blue" text v-bind="attrs" @click="snackbar = false">
+        Close
+      </v-btn>
+    </template>
+  </v-snackbar>
+</div>
 </template>
 <script>
 export default {
@@ -101,8 +76,7 @@ export default {
           data,
           {
             headers: {
-              Authorization:
-                'key=AAAApnkduNc:APA91bGNtQAb0myOlnOmSZ3RiFoQutOXuosspsS_KWPMjljaSjUUgMJZ48imiw_pfsMpyR6rR9J27jVS02O7rnWs7Bc1juHIEU95p9xogaFRAzwBG09W6b_WnIryMm2KjvPSnxo2Juz2',
+              Authorization: 'key=AAAApnkduNc:APA91bGNtQAb0myOlnOmSZ3RiFoQutOXuosspsS_KWPMjljaSjUUgMJZ48imiw_pfsMpyR6rR9J27jVS02O7rnWs7Bc1juHIEU95p9xogaFRAzwBG09W6b_WnIryMm2KjvPSnxo2Juz2',
             },
           }
         );
@@ -119,13 +93,19 @@ export default {
       const self = this;
       const getcontents = await this.$fire.database
         .ref('notification/')
-        .once('value', function (snapshot) {
+        .once('value', function(snapshot) {
           console.log(snapshot.val());
           const data = snapshot.val();
           const itemData = Object.values(data);
           const fcmtoken = [];
           itemData.map((data) => fcmtoken.push(data.fcm));
-          self.fcmtoken = fcmtoken;
+
+          const filteredArr = fcmtoken.filter((item, index) => {
+            return fcmtoken.indexOf(item) === index ? item : console.log('eer');
+          });
+
+
+          self.fcmtoken = filteredArr;
         })
         .catch((error) => console.log(error.message));
       console.log('getcontents', getcontents);
