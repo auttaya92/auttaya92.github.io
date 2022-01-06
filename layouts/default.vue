@@ -66,21 +66,26 @@ export default {
           title: 'Contract',
           to: '/contract',
         },
+        {
+          icon: 'mdi-book-open-page-variant',
+          title: 'Sale Page',
+          to: '/salepage',
+        },
       ],
       miniVariant: true,
       title: 'CMS มังกรฟ้า มหานคร',
-    }
+    };
   },
   methods: {
     handleLogout() {
       this.$fire.auth.signOut().then(() => {
-        this.$cookies.removeAll()
+        this.$cookies.removeAll();
         this.$router.push({
           path: `/login`,
-        })
-        console.log('User signed out!')
-      })
+        });
+        console.log('User signed out!');
+      });
     },
   },
-}
+};
 </script>

@@ -1,4 +1,4 @@
-import colors from 'vuetify/es5/util/colors'
+import colors from 'vuetify/es5/util/colors';
 
 export default {
   target: 'static',
@@ -11,16 +11,22 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' }
+      { hid: 'description', name: 'description', content: '' },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [],
+  css: [
+    'quill/dist/quill.core.css',
+    // for snow theme
+    'quill/dist/quill.snow.css',
+    // for bubble theme
+    'quill/dist/quill.bubble.css',
+  ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: [{ src: '~plugins/nuxt-quill-plugin', ssr: false }],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -30,7 +36,7 @@ export default {
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/vuetify
-    '@nuxtjs/vuetify'
+    '@nuxtjs/vuetify',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -40,12 +46,11 @@ export default {
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
     '@nuxtjs/firebase',
-    'cookie-universal-nuxt'
+    'cookie-universal-nuxt',
   ],
   firebase: {
     config: {
       // REQUIRED: Official config for firebase.initializeApp(config):
-
       apiKey: 'AIzaSyD6D1SeUkhQIXpvbWNgXMxqq_8tTcm02OM',
       authDomain: 'blue-dragon-d0289.firebaseapp.com',
       databaseURL:
@@ -54,7 +59,16 @@ export default {
       storageBucket: 'blue-dragon-d0289.appspot.com',
       messagingSenderId: '714996562135',
       appId: '1:714996562135:web:6406fa74517804ff9e1892',
-      measurementId: 'G-2H8N7N7DRN'
+      measurementId: 'G-2H8N7N7DRN',
+
+      // apiKey: 'AIzaSyAEL2xtYYwbMXVfJdjenAz2N30wWQ1IOSg',
+      // authDomain: 'bd24-server.firebaseapp.com',
+      // databaseURL: 'https://bd24-server-default-rtdb.firebaseio.com',
+      // projectId: 'bd24-server',
+      // storageBucket: 'bd24-server.appspot.com',
+      // messagingSenderId: '224656482620',
+      // appId: '1:224656482620:web:3da9fdbd926aaf2a043e39',
+      // measurementId: 'G-FL02Q33SSM'
     },
     services: {
       auth: true,
@@ -65,8 +79,8 @@ export default {
       messaging: true,
       performance: true,
       analytics: true,
-      remoteConfig: true
-    }
+      remoteConfig: true,
+    },
   },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},
@@ -74,8 +88,8 @@ export default {
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
     manifest: {
-      lang: 'en'
-    }
+      lang: 'en',
+    },
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
@@ -91,10 +105,10 @@ export default {
           info: colors.teal.lighten1,
           warning: colors.amber.base,
           error: colors.deepOrange.accent4,
-          success: colors.green.accent3
-        }
-      }
-    }
+          success: colors.green.accent3,
+        },
+      },
+    },
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
@@ -103,8 +117,8 @@ export default {
       config.module.rules.push({
         enforce: 'pre',
         test: /\.(js|vue)$/,
-        exclude: /(node_modules)/
-      })
-    }
-  }
-}
+        exclude: /(node_modules)/,
+      });
+    },
+  },
+};
